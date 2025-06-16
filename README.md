@@ -1,6 +1,7 @@
 # 🚀 MCP 工具包 - 智能 AI 代理工具集
 
-> 專為 AI 代理設計的高效 MCP (Model Context Protocol) 工具包，提升 AI 助手的智能化操作能力
+> 專為 AI 代理設計的高效 MCP (Model Context Protocol) 工具包，提升 AI 助手的智能化操作能力。
+> 通通都是AI幫AI做的工具，我就純vibe coding，哈哈!
 
 ## 📦 工具概覽
 
