@@ -1,0 +1,19 @@
+[Unit]
+Description=Smart Tasks MCP Reminder Service
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=%i
+Group=%i
+WorkingDirectory=/home/ubuntu24/corsor/mcpTool/smart-tasks-mcp
+ExecStart=/home/ubuntu24/corsor/mcpTool/smart-tasks-mcp/start-reminder.sh
+Restart=always
+RestartSec=10
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
