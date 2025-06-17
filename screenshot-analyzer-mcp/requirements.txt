@@ -1,0 +1,20 @@
+# OCR 引擎
+paddlepaddle>=2.5.0
+paddleocr>=2.7.0
+
+# 圖像處理
+opencv-python>=4.8.0
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# 表格檢測專用
+opencv-contrib-python>=4.8.0
+
+# 機器學習
+scikit-image>=0.21.0
+
+# 手寫文字識別
+easyocr>=1.7.0
+
+# 系統依賴
+psutil>=5.9.0

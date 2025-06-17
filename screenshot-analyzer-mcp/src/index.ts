@@ -7,7 +7,7 @@ import {
   ListToolsRequestSchema,
   Tool,
 } from '@modelcontextprotocol/sdk/types.js';
-import { OptimizedOCREngine } from './services/OptimizedOCREngine.js';
+import { HybridOCREngine } from './services/HybridOCREngine.js';
 import { ContentAnalyzer } from './services/ContentAnalyzer.js';
 import { 
   AnalysisOptions, 
@@ -21,7 +21,7 @@ import path from 'path';
 
 class ScreenshotAnalyzerServer {
   private server: Server;
-  private ocrEngine: OptimizedOCREngine;
+  private ocrEngine: HybridOCREngine;
   private contentAnalyzer: ContentAnalyzer;
 
   constructor() {
@@ -37,7 +37,7 @@ class ScreenshotAnalyzerServer {
       }
     );
 
-    this.ocrEngine = new OptimizedOCREngine();
+    this.ocrEngine = new HybridOCREngine();
     this.contentAnalyzer = new ContentAnalyzer();
     this.setupHandlers();
   }
@@ -210,22 +210,23 @@ class ScreenshotAnalyzerServer {
     
     const metadata = await this.extractImageMetadata(imagePath);
     
-    const processedImageBuffer = await this.ocrEngine.processImage(
-      imagePath, 
-      options.imageProcessing || {}
-    );
+    // 使用混合 OCR 引擎直接處理圖像
+    const hybridResult = await this.ocrEngine.processImage(imagePath, options);
     
-    const ocrResult = await this.ocrEngine.recognizeText(
-      processedImageBuffer,
-      options
-    );
-    
-    const analysis = this.contentAnalyzer.analyzeContent(ocrResult);
+    const analysis = this.contentAnalyzer.analyzeContent(hybridResult);
     
     const result: ScreenshotAnalysis = {
-      ocr: ocrResult,
+      ocr: hybridResult,
       metadata,
-      analysis
+      analysis: {
+        ...analysis,
+        processingDetails: {
+          enginesUsed: hybridResult.engineUsed,
+          processingTime: hybridResult.processingTime,
+          imageStats: hybridResult.imageStats,
+          tablesDetected: hybridResult.tableResults?.totalTables || 0
+        }
+      }
     };
 
     return {
@@ -243,22 +244,26 @@ class ScreenshotAnalyzerServer {
     
     await this.validateImageFile(imagePath);
     
-    const processOptions = enhanceImage ? {
-      enhanceContrast: true,
-      removeNoise: true
-    } : {};
+    const options = {
+      languages,
+      imageProcessing: enhanceImage ? {
+        enhanceContrast: true,
+        removeNoise: true
+      } : {}
+    };
     
-    const processedImageBuffer = await this.ocrEngine.processImage(imagePath, processOptions);
-    const ocrResult = await this.ocrEngine.recognizeText(processedImageBuffer, { languages });
+    const hybridResult = await this.ocrEngine.processImage(imagePath, options);
     
     return {
       content: [
         {
           type: 'text',
           text: JSON.stringify({
-            text: ocrResult.text,
-            confidence: ocrResult.confidence,
-            wordCount: ocrResult.words.length
+            text: hybridResult.text,
+            confidence: hybridResult.confidence,
+            wordCount: hybridResult.words.length,
+            enginesUsed: hybridResult.engineUsed,
+            processingTime: hybridResult.processingTime
           }, null, 2),
         },
       ],
@@ -289,7 +294,11 @@ class ScreenshotAnalyzerServer {
     const outputDir = path.dirname(outputPath);
     await fs.mkdir(outputDir, { recursive: true });
     
-    const processedBuffer = await this.ocrEngine.processImage(inputPath, options);
+    // 注意：HybridOCREngine.processImage 返回完整結果，這裡需要調用內部的預處理
+    // 暫時使用 AdaptiveOCREngine 的預處理功能
+    const { AdaptiveOCREngine } = await import('./services/AdaptiveOCREngine.js');
+    const adaptiveEngine = new AdaptiveOCREngine();
+    const processedBuffer = await adaptiveEngine.processImage(inputPath, options);
     await fs.writeFile(outputPath, processedBuffer);
     
     return {

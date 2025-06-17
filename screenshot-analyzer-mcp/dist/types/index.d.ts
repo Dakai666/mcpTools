@@ -62,6 +62,16 @@ export interface ContentAnalysis {
     possibleTables: TableStructure[];
     detectedLanguages: string[];
     summary: string;
+    processingDetails?: {
+        enginesUsed: string[];
+        processingTime: number;
+        imageStats?: {
+            width: number;
+            height: number;
+            fileSize: number;
+        };
+        tablesDetected: number;
+    };
 }
 export interface TextBlock {
     type: 'title' | 'paragraph' | 'list' | 'code' | 'other';
