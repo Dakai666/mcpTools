@@ -1,0 +1,48 @@
+{
+  "name": "academic-knowledge-mcp",
+  "version": "1.0.0",
+  "description": "統一學術知識整合 MCP 工具 - 快速獲得各種深淺不同的優質知識源",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "academic-knowledge-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "node test.js"
+  },
+  "keywords": [
+    "mcp",
+    "academic",
+    "knowledge",
+    "research",
+    "arxiv",
+    "semantic-scholar",
+    "wikipedia",
+    "model-context-protocol"
+  ],
+  "author": "Claude Code",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "fs-extra": "^11.1.1",
+    "node-fetch": "^3.3.0",
+    "pdf-parse": "^1.1.1",
+    "turndown": "^7.1.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.19.1",
+    "@types/pdf-parse": "^1.1.5",
+    "@types/turndown": "^5.0.5",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

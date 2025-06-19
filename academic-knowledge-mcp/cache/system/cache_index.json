@@ -1,0 +1,20 @@
+{
+  "檢索增強生成_zh": {
+    "id": "檢索增強生成_zh",
+    "type": "wikipedia",
+    "subtype": "processed",
+    "filePath": "/home/ubuntu24/corsor/mcpTool/academic-knowledge-mcp/cache/wikipedia/processed/zh/_______zh/_______zh_processed.txt",
+    "metadata": {
+      "processingDate": "2025-06-19T13:02:28.963Z",
+      "language": "zh",
+      "wordCount": 224,
+      "sectionCount": 1,
+      "standardPath": "wikipedia/processed/zh/_______zh",
+      "storageVersion": "2.0.0"
+    },
+    "createdAt": "2025-06-19T13:02:28.964Z",
+    "lastAccessed": "2025-06-19T13:10:50.091Z",
+    "sizeBytes": 1817,
+    "checksum": "ade4bc2ac473cb7f1507219e7f27be6c"
+  }
+}
